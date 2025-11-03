@@ -1,0 +1,59 @@
+# ============================
+# Curvelet Capital - requirements.txt
+# Signals / analytics / execution + Flask app
+# ============================
+
+# --- Core numerical / scientific ---
+numpy                 # arrays, vectorized math
+pandas                # time series, DataFrames
+scipy                 # signal processing, stats
+
+# --- Visualization ---
+matplotlib            # plotting
+plotly                # interactive charts
+
+# --- Market data ---
+yfinance              # Yahoo Finance fetcher
+
+# --- Pricing / curves ---
+quantlib              # pricing (QuantLib-Python bindings)
+rateslib              # rate curves / analytics
+
+# --- Multi-scale signal processing ---
+PyWavelets            # wavelet transforms (1D/2D)
+# pyshearlab            # shearlets (curvelet-family) – may need source install
+
+# --- Data files / compression ---
+pyarrow               # parquet I/O and columnar memory model
+
+# --- Broker APIs (legit/robust) ---
+schwab-api            # Schwab Developer API (REST/OAuth)
+# ib-insync             # Interactive Brokers API
+# alpaca-trade-api      # Alpaca brokerage/trading
+# tastytrade            # Tastytrade API (options-friendly)
+
+# --- HTTP / streaming helpers ---
+requests              # REST calls
+requests-cache        # HTTP cache (avoid API throttling)
+websocket-client      # streaming quotes
+
+# --- Config / secrets ---
+python-dotenv         # load .env for keys
+
+# --- Web app (Flask) ---
+Flask                 # web framework
+Flask-Caching         # cache (simple/redis)
+Flask-Cors            # CORS if SPA hits API
+gunicorn              # prod WSGI server (Linux/macOS)
+waitress              # prod server (Windows-friendly, pure-Python)
+Jinja2                # templating (pulled by Flask, explicit for clarity)
+
+# --- Quality Assurance / Backtesting ---
+backtesting           # backtest engine
+vectorbt              # vectorized backtesting / analysis
+pytest                # testing
+pytest-mock           # mocking for tests
+
+# --- Optional tasking / scheduling (uncomment if needed) ---
+# APScheduler          # timed jobs (polling, heartbeats)
+# redis                # backing store for cache/queues
