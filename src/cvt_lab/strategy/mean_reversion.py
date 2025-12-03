@@ -12,7 +12,8 @@ class MeanReversion(BaseTrade):
             self,
             series,
             funds,
-            position    ):
+            position
+    ):
         super().__init__(
             series=series,
             funds=funds,
