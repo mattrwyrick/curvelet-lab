@@ -10,7 +10,7 @@ class CancellableSwap:
         self,
         swap: Swap,
         cancel_after_years: int = 2,
-        cancel_freq: ql.Period = ql.Period(6, ql.Months)
+        cancel_freq: ql.Period = ql.Period(3, ql.Months)
     ):
         """
         Wraps a vanilla swap and adds Bermudan cancellation rights.
