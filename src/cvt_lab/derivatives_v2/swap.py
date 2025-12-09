@@ -305,6 +305,10 @@ class Swap:
         plt.show()
 
     def get_bucketed_risks(self, tenors=None, bump_bp=1.0):
+        """
+        Computes key rate bucketed Delta, Gamma, and PV01 by bumping individual zero rates
+        and rebuilding the curve using those bumped values.
+        """
         if tenors is None:
             tenors = ['1Y', '2Y', '3Y', '5Y', '7Y', '10Y', '15Y', '20Y', '30Y']
 
@@ -313,27 +317,53 @@ class Swap:
         base_npv = self.get_npv()
         risks = []
 
-        for tenor_str in tenors:
-            tenor = ql.PeriodParser.parse(tenor_str)
-            bump_date = self.calendar.advance(today, tenor)
-            base_rate = self.discount_curve.zeroRate(bump_date, self.day_count, ql.Continuous).rate()
+        original_curve = self.discount_curve
 
-            bumped_up = ql.FlatForward(self.effective_date, ql.QuoteHandle(ql.SimpleQuote(base_rate + bump)), self.day_count)
-            bumped_down = ql.FlatForward(self.effective_date, ql.QuoteHandle(ql.SimpleQuote(base_rate - bump)), self.day_count)
-            bumped_up.enableExtrapolation()
-            bumped_down.enableExtrapolation()
+        # Extract dates from tenors
+        dates = [self.calendar.advance(today, ql.PeriodParser.parse(t)) for t in tenors]
 
-            self.set_curve(bumped_up)
+        # Get base zero rates
+        base_rates = [
+            original_curve.zeroRate(d, self.day_count, ql.Continuous).rate()
+            for d in dates
+        ]
+
+        for i, tenor_str in enumerate(tenors):
+            # Bump up and down this tenor
+            bumped_up_rates = base_rates.copy()
+            bumped_down_rates = base_rates.copy()
+
+            bumped_up_rates[i] += bump
+            bumped_down_rates[i] -= bump
+
+            # Rebuild the curve from bumped rates
+            up_curve = ql.ZeroCurve(dates, bumped_up_rates, self.day_count, self.calendar)
+            down_curve = ql.ZeroCurve(dates, bumped_down_rates, self.day_count, self.calendar)
+
+            up_curve.enableExtrapolation()
+            down_curve.enableExtrapolation()
+
+            # Reprice with bumped up curve
+            self.set_curve(up_curve)
             npv_up = self.get_npv()
-            self.set_curve(bumped_down)
+
+            # Reprice with bumped down curve
+            self.set_curve(down_curve)
             npv_down = self.get_npv()
-            self.set_curve(self.discount_curve)
+
+            # Reset curve
+            self.set_curve(original_curve)
 
             delta = (npv_up - npv_down) / (2 * bump)
             gamma = (npv_up + npv_down - 2 * base_npv) / (bump ** 2)
             pv01 = delta * bump
 
-            risks.append({"Tenor": tenor_str, "Delta": delta, "Gamma": gamma, "PV01": pv01})
+            risks.append({
+                "Tenor": tenor_str,
+                "Delta": delta,
+                "Gamma": gamma,
+                "PV01": pv01
+            })
 
         return pd.DataFrame(risks)
 

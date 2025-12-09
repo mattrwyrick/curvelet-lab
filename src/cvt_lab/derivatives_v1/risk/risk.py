@@ -4,7 +4,7 @@ import QuantLib as ql
 import pandas as pd
 from typing import Dict, Tuple
 from copy import deepcopy
-from cvt_lab.derivatives.products.bermudan_swaption import BermudanSwaption
+from cvt_lab.derivatives_v2.products.bermudan_swaption import BermudanSwaption
 
 
 def compute_bucketed_pv01(

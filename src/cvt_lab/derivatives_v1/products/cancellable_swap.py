@@ -1,7 +1,7 @@
 # cancellable_swap.py
 
 from swap import Swap
-from cvt_lab.derivatives.products.bermudan_swaption import BermudanSwaption
+from cvt_lab.derivatives_v2.products.bermudan_swaption import BermudanSwaption
 import QuantLib as ql
 
 

@@ -4,9 +4,9 @@ import datetime as dt
 import QuantLib as ql
 import matplotlib.pyplot as plt
 
-from cvt_lab.derivatives.market.curve import build_usd_libor_curve, curve_to_dataframe
-from cvt_lab.derivatives.market.vol import SwaptionVolSurface
-from cvt_lab.derivatives.market.vol_diagnostics import (
+from cvt_lab.derivatives_v2.market.curve import build_usd_libor_curve, curve_to_dataframe
+from cvt_lab.derivatives_v2.market.vol import SwaptionVolSurface
+from cvt_lab.derivatives_v2.market.vol_diagnostics import (
     build_atm_vol_matrix,
     plot_atm_vol_surface,
     plot_smile,
@@ -14,11 +14,11 @@ from cvt_lab.derivatives.market.vol_diagnostics import (
     test_butterfly_arbitrage,
 )
 
-from cvt_lab.derivatives.products.swap import Swap
-from cvt_lab.derivatives.products.cancellable_swap import CancellableSwap
+from cvt_lab.derivatives_v2.products.swap import Swap
+from cvt_lab.derivatives_v2.products.cancellable_swap import CancellableSwap
 
-from cvt_lab.derivatives.risk.risk import compute_bucketed_pv01, bermudan_vega_ladder
-from cvt_lab.derivatives.risk.risk_metrics import full_risk_report
+from cvt_lab.derivatives_v2.risk.risk import compute_bucketed_pv01, bermudan_vega_ladder
+from cvt_lab.derivatives_v2.risk.risk_metrics import full_risk_report
 
 
 def main():
